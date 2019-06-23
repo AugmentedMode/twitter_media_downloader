@@ -11,17 +11,21 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
-try:
-    tweet_url = str(input('Input URL: '))
-    tweet_id = tweet_url.rsplit('/', 1)[-1]
-
-    tweet = api.get_status(tweet_id)
+def get_media():
 
     try:
-        media_file = tweet.extended_entities['media'][0]['video_info']['variants'][0]['url']
-        urllib.request.urlretrieve(media_file, 'downloaded_gif.mp4')
-    except Exception as e:
-        print('Sorry, could not download this GIF')
+        tweet_url = str(input('Input URL: '))
+        tweet_id = tweet_url.rsplit('/', 1)[-1]
 
-except Exception as e:
-    print('Sorry, please input a valid URL')
+        tweet = api.get_status(tweet_id)
+
+        try:
+            media_file = tweet.extended_entities['media'][0]['video_info']['variants'][0]['url']
+            urllib.request.urlretrieve(media_file, 'downloaded_gif.mp4')
+        except Exception as e:
+            print('Sorry, could not download this GIF')
+
+    except Exception as e:
+        print('Sorry, please input a valid URL')
+
+get_media()
